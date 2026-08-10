@@ -22,7 +22,9 @@ def test_wf_alignment(compare_numba_vs_python):
     # tests on centroid: undefined (NaN) centroid falls back to the
     # unaligned leading window instead of raising
     w_ramp = np.arange(len_wf, dtype="float64")
-    w_out_nan = compare_numba_vs_python(wf_alignment, w_ramp, np.nan, 1, size, w_out)[-1]
+    w_out_nan = compare_numba_vs_python(wf_alignment, w_ramp, np.nan, 1, size, w_out)[
+        -1
+    ]
     assert np.array_equal(w_out_nan, w_ramp[:size])
 
     # tests on shift

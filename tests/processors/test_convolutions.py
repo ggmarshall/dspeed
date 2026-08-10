@@ -5,9 +5,7 @@ from dspeed.processors import convolve_wf, fft_convolve_wf
 
 
 def test_fft_convolve_wf_valid_mode():
-    block = np.tile(
-        np.sin(np.arange(100, dtype="float32") / 10), (4, 1)
-    )
+    block = np.tile(np.sin(np.arange(100, dtype="float32") / 10), (4, 1))
     kernel = (np.ones(10) / 10).astype("float32")
     w_out = np.full((4, 100 - 10 + 1), np.nan, dtype="float32")
 
@@ -22,9 +20,7 @@ def test_fft_convolve_wf_does_not_mutate_input():
     """A NaN'd waveform must produce NaN output without zeroing the input in
     place: w_in is a view into the shared processing-chain buffer that
     downstream processors also read."""
-    block = np.tile(
-        np.sin(np.arange(100, dtype="float32") / 10), (4, 1)
-    )
+    block = np.tile(np.sin(np.arange(100, dtype="float32") / 10), (4, 1))
     block[2, 50] = np.nan
     orig = block.copy()
     kernel = (np.ones(10) / 10).astype("float32")
@@ -71,7 +67,9 @@ def test_convolve_wf_nan_and_errors():
 
     # kernel longer than waveform
     with pytest.raises(DSPFatal):
-        convolve_wf(np.zeros(4, "float32"), k, np.int8(ord("v")), np.zeros(1, "float32"))
+        convolve_wf(
+            np.zeros(4, "float32"), k, np.int8(ord("v")), np.zeros(1, "float32")
+        )
 
     # wrong output length
     with pytest.raises(DSPFatal):

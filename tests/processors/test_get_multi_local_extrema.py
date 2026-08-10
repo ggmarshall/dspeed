@@ -457,9 +457,7 @@ def test_get_multi_local_extrema_both_cons_minima():
     n_min_out = np.zeros(1, dtype="uint32")
     n_max_out = np.zeros(1, dtype="uint32")
 
-    get_multi_local_extrema(
-        wf_w, 3, 3, 2, 0, 5, max_out, min_out, n_max_out, n_min_out
-    )
+    get_multi_local_extrema(wf_w, 3, 3, 2, 0, 5, max_out, min_out, n_max_out, n_min_out)
 
     assert np.array_equal(max_out, np.array([10, 30, np.nan]), equal_nan=True)
     assert n_max_out[0] == 2
