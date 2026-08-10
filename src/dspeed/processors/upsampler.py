@@ -8,6 +8,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -35,7 +36,7 @@ def upsampler(w_in: np.ndarray, upsample: float, w_out: np.ndarray) -> None:
 
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if not (upsample > 0):
@@ -104,7 +105,7 @@ def interpolating_upsampler(
 
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     upsample = len(w_out) / len(w_in)

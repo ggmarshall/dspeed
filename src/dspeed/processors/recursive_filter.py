@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -55,9 +56,9 @@ def recursive_filter(w_in, a, b, init_in, init_out, w_out):
 
     w_out[:] = np.nan
     if (
-        np.isnan(w_in).any()
-        or np.isnan(a).any()
-        or np.isnan(b).any()
+        contains_nan(w_in)
+        or contains_nan(a)
+        or contains_nan(b)
         or np.isnan(init_in)
         or np.isnan(init_out)
     ):

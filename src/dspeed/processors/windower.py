@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -36,7 +37,7 @@ def windower(w_in: np.ndarray, t0_in: int, w_out: np.ndarray) -> None:
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(t0_in):
+    if contains_nan(w_in) or np.isnan(t0_in):
         return
 
     if len(w_out) >= len(w_in):

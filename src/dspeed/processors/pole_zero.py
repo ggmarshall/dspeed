@@ -7,6 +7,7 @@ from numba import guvectorize, vectorize
 
 from ..errors import DSPFatal
 from ..processors import recursive_filter
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -54,7 +55,7 @@ def pole_zero(w_in: np.ndarray, t_tau: float, w_out: np.ndarray) -> None:
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(t_tau):
+    if contains_nan(w_in) or np.isnan(t_tau):
         return
 
     const = np.exp(-1 / t_tau)
@@ -73,7 +74,7 @@ def pole_zero(w_in: np.ndarray, t_tau: float, w_out: np.ndarray) -> None:
         w_tmp[0] = w_tmp[1]  # Shuffle the buffer for the next iteration
 
     # Check the output
-    if np.isnan(w_out).any():
+    if contains_nan(w_out):
         raise DSPFatal("Pole-zero filter produced nans in output.")
 
 
@@ -158,7 +159,7 @@ def double_pole_zero(
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(t_tau1) or np.isnan(t_tau2) or np.isnan(frac):
+    if contains_nan(w_in) or np.isnan(t_tau1) or np.isnan(t_tau2) or np.isnan(frac):
         return
     if len(w_in) <= 3:
         raise DSPFatal(

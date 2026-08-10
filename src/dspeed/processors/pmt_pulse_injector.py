@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -33,7 +34,7 @@ def inject_gumbel(
     wf_out[:] = np.nan
 
     # Early exit if any of the inputs contain NaN values (invalid inputs).
-    if np.isnan(wf_in).any() or np.isnan(a) or np.isnan(t0) or np.isnan(beta):
+    if contains_nan(wf_in) or np.isnan(a) or np.isnan(t0) or np.isnan(beta):
         return
 
     wf_out[:] = wf_in[:]
@@ -106,7 +107,7 @@ def inject_general_logistic(
 
     # Early exit if any of the inputs contain NaN values (invalid inputs).
     if (
-        np.isnan(wf_in).any()
+        contains_nan(wf_in)
         or np.isnan(a)
         or np.isnan(t0)
         or np.isnan(rt)

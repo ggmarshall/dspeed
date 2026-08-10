@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -62,7 +63,7 @@ def linear_slope_fit(
     slope[0] = np.nan
     intercept[0] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     sum_x = sum_x2 = sum_xy = sum_y = mean[0] = stdev[0] = 0
@@ -144,7 +145,7 @@ def linear_slope_diff(
     mean[0] = np.nan
     rms[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(slope) or np.isnan(intercept):
+    if contains_nan(w_in) or np.isnan(slope) or np.isnan(intercept):
         return
 
     mean[0] = rms[0] = 0

@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -47,7 +48,7 @@ def trap_filter(w_in: np.ndarray, rise: int, flat: int, w_out: np.ndarray) -> No
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(rise) or np.isnan(flat):
+    if contains_nan(w_in) or np.isnan(rise) or np.isnan(flat):
         return
 
     if int(rise) < 0:
@@ -115,7 +116,7 @@ def trap_norm(w_in: np.ndarray, rise: int, flat: int, w_out: np.ndarray) -> None
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(rise) or np.isnan(flat):
+    if contains_nan(w_in) or np.isnan(rise) or np.isnan(flat):
         return
 
     if int(rise) < 0:
@@ -193,7 +194,7 @@ def asym_trap_filter(
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(rise) or np.isnan(flat) or np.isnan(fall):
+    if contains_nan(w_in) or np.isnan(rise) or np.isnan(flat) or np.isnan(fall):
         return
 
     if int(rise) < 0:
@@ -273,7 +274,7 @@ def trap_pickoff(
     """
     a_out[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(rise) or np.isnan(flat) or np.isnan(t_pickoff):
+    if contains_nan(w_in) or np.isnan(rise) or np.isnan(flat) or np.isnan(t_pickoff):
         return
 
     if int(rise) < 0:

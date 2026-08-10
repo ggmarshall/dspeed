@@ -8,6 +8,8 @@ from numba import guvectorize
 from dspeed.errors import DSPFatal
 from dspeed.utils import numba_defaults_kwargs as nb_kwargs
 
+from ..utils import contains_nan
+
 
 @guvectorize(
     [
@@ -49,7 +51,7 @@ def get_wf_centroid(w_in: np.ndarray, shift: int, centroid: int) -> None:
 
     centroid[0] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if np.isnan(shift):

@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -46,7 +47,7 @@ def moving_window_left(w_in: np.ndarray, length: float, w_out: np.ndarray) -> No
 
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if not length >= 0 or not length < len(w_in):
@@ -94,7 +95,7 @@ def moving_window_right(w_in: np.ndarray, length: float, w_out: np.ndarray) -> N
 
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if not length >= 0 or not length < len(w_in):
@@ -161,7 +162,7 @@ def moving_window_multi(
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if np.floor(length) != length:
@@ -237,7 +238,7 @@ def avg_current(w_in: np.ndarray, length: float, w_out: np.ndarray) -> None:
 
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if not length >= 0 or not length < len(w_in):

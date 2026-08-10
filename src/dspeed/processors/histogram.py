@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -64,7 +65,7 @@ def histogram(
     weights_out[:] = 0
     borders_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     wf_min = min(w_in)
@@ -155,7 +156,7 @@ def histogram_around_mode(
 
     # borders_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         raise DSPFatal("input data contains nan")
 
     # number of bins

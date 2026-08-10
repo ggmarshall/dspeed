@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -63,7 +64,7 @@ def pad(
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in[:len_in]).any() or np.isnan(offset):
+    if contains_nan(w_in[:len_in]) or np.isnan(offset):
         return
 
     if len_in > len(w_in):

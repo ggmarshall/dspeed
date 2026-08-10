@@ -8,6 +8,8 @@ from numba import guvectorize
 from dspeed.errors import DSPFatal
 from dspeed.utils import numba_defaults_kwargs as nb_kwargs
 
+from ..utils import contains_nan
+
 
 @guvectorize(
     [
@@ -57,7 +59,7 @@ def wf_alignment(
 
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if np.isnan(centroid):

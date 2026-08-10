@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -45,7 +46,7 @@ def rc_cr2(w_in: np.array, t_tau: float, w_out: np.array) -> None:
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(t_tau):
+    if contains_nan(w_in) or np.isnan(t_tau):
         return
 
     if len(w_in) <= 3:
@@ -90,5 +91,5 @@ def rc_cr2(w_in: np.array, t_tau: float, w_out: np.array) -> None:
         w_tmp[2] = w_tmp[3]
 
     # Check the output
-    if np.isnan(w_out).any():
+    if contains_nan(w_out):
         raise DSPFatal("RC-CR^2 filter produced nans in output.")

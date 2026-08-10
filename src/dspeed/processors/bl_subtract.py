@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -40,7 +41,7 @@ def bl_subtract(w_in: np.ndarray, a_baseline: float, w_out: np.ndarray) -> None:
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(a_baseline):
+    if contains_nan(w_in) or np.isnan(a_baseline):
         return
 
     w_out[:] = w_in[:] - a_baseline

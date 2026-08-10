@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -41,7 +42,7 @@ def presum(w_in: np.ndarray, do_norm: int, ps_fact: int, w_out: np.ndarray) -> N
     w_out[:] = np.nan
     ps_fact[0] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
     if do_norm not in [int(0), int(1)]:
         raise DSPFatal("do_norm type not found.")

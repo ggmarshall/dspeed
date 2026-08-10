@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -120,7 +121,7 @@ def get_multi_local_extrema(
 
     # Checks
 
-    if np.isnan(w_in).any() or np.isnan(a_delta_max_in) or np.isnan(a_delta_min_in):
+    if contains_nan(w_in) or np.isnan(a_delta_max_in) or np.isnan(a_delta_min_in):
         return
 
     if (not len(vt_max_out) < len(w_in)) or (not len(vt_min_out) < len(w_in)):

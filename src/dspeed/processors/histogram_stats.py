@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -84,7 +85,7 @@ def histogram_peakstats(
     mode_out[0] = np.nan
     width_out[0] = np.nan
 
-    if np.isnan(weights_in).any():
+    if contains_nan(weights_in):
         raise DSPFatal("nan in input weights")
 
     n_bins = len(weights_in)
@@ -221,7 +222,7 @@ def histogram_stats(
     mode_out[0] = np.nan
     max_out[0] = np.nan
 
-    if np.isnan(weights_in).any():
+    if contains_nan(weights_in):
         return
 
     if len(weights_in) + 1 != len(edges_in):

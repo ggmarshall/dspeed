@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -45,7 +46,7 @@ def mean_below_threshold(w_in: np.ndarray, threshold: float, result: float) -> N
     """
     result[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(threshold):
+    if contains_nan(w_in) or np.isnan(threshold):
         return
 
     total = 0.0

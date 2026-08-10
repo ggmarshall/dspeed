@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -57,7 +58,7 @@ def time_point_thresh(
     t_out[0] = np.nan
 
     if (
-        np.isnan(w_in).any()
+        contains_nan(w_in)
         or np.isnan(a_threshold)
         or np.isnan(t_start)
         or np.isnan(walk_forward)
@@ -169,7 +170,7 @@ def interpolated_time_point_thresh(
     t_out[0] = np.nan
 
     if (
-        np.isnan(w_in).any()
+        contains_nan(w_in)
         or np.isnan(a_threshold)
         or np.isnan(t_start)
         or np.isnan(walk_forward)
@@ -299,7 +300,7 @@ def multi_time_point_thresh(
     """
     t_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(a_threshold).any() or np.isnan(t_start):
+    if contains_nan(w_in) or contains_nan(a_threshold) or np.isnan(t_start):
         return
 
     if t_start < 0 or t_start >= len(w_in):
@@ -469,7 +470,7 @@ def bi_level_zero_crossing_time_points(
 
     # Check everything is ok
     if (
-        np.isnan(w_in).any()
+        contains_nan(w_in)
         or np.isnan(a_pos_threshold_in)
         or np.isnan(a_neg_threshold_in)
         or np.isnan(t_start_in)
