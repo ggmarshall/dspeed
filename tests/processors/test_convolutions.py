@@ -78,3 +78,20 @@ def test_convolve_wf_nan_and_errors():
     # invalid mode
     with pytest.raises(DSPFatal):
         convolve_wf(w[0], k, np.int8(ord("x")), np.zeros(46, "float32"))
+
+
+def test_fft_convolve_wf_1d_input():
+    # single 1-D waveform (not a block): NaN masking must handle the
+    # 0-d reduction result
+    w = np.sin(np.arange(100, dtype="float32") / 10)
+    k = (np.ones(10) / 10).astype("float32")
+    w_out = np.full(91, np.nan, dtype="float32")
+    fft_convolve_wf(w, k, np.int8(ord("v")), w_out)
+    assert np.allclose(w_out, np.convolve(w, k, "valid"), rtol=1e-5, atol=1e-6)
+
+    w_nan = w.copy()
+    w_nan[50] = np.nan
+    orig = w_nan.copy()
+    fft_convolve_wf(w_nan, k, np.int8(ord("v")), w_out)
+    assert np.all(np.isnan(w_out))
+    assert np.array_equal(w_nan, orig, equal_nan=True)
