@@ -96,7 +96,10 @@ def fft_convolve_wf(
     """
     w_out[:] = np.nan
     nan_ids = np.isnan(w_in).any(axis=-1)
-    w_in[nan_ids] = 0
+    if nan_ids.any():
+        # zero out NaN'd waveforms in a copy: w_in is a view into the shared
+        # processing-chain buffer, which downstream processors also read
+        w_in = np.where(nan_ids[..., np.newaxis], 0, w_in)
 
     if np.isnan(kernel).any():
         return
