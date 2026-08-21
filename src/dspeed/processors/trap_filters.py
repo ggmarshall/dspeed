@@ -240,7 +240,8 @@ def trap_pickoff(
 ) -> None:
     """Pick off the value at the provided index of a symmetric trapezoidal
     filter to the input waveform, normalized by the number of samples averaged
-    in the rise and fall sections.
+    in the rise and fall sections. If a fractional pickoff index is provided,
+    the value is linearly interpolated between the two nearest indices.
 
     Parameters
     ----------
@@ -275,9 +276,6 @@ def trap_pickoff(
     if np.isnan(w_in).any() or np.isnan(rise) or np.isnan(flat) or np.isnan(t_pickoff):
         return
 
-    if np.floor(t_pickoff) != t_pickoff:
-        raise DSPFatal("The pick-off index must be an integer")
-
     if int(rise) < 0:
         raise DSPFatal("The number of samples in the rise section must be positive")
 
@@ -287,15 +285,25 @@ def trap_pickoff(
     if 2 * int(rise) + int(flat) > len(w_in):
         raise DSPFatal("The trapezoid width is wider than the waveform")
 
-    i_1 = 0.0
-    i_2 = 0.0
-    start_time = int(t_pickoff + 1)
-
-    if not len(w_in) >= start_time >= 2 * rise + flat:
+    if not (len(w_in) > np.ceil(t_pickoff) and np.floor(t_pickoff) >= 2 * rise + flat):
         return
 
-    for i in range(start_time - rise, start_time, 1):
+    start_time = int(np.floor(t_pickoff))
+
+    # Only first and last points of trap rise/fall must be interpolated!
+    frac = t_pickoff - start_time
+    i_1 = 0.0
+    i_2 = 0.0
+
+    for i in range(start_time, start_time - rise, -1):
         i_1 += w_in[i]
-    for i in range(start_time - 2 * rise - flat, start_time - rise - flat, 1):
+    for i in range(start_time - rise - flat, start_time - 2 * rise - flat, -1):
         i_2 += w_in[i]
+
+    if frac > 0:
+        i_1 += frac * (w_in[start_time + 1] - w_in[start_time - rise + 1])
+        i_2 += frac * (
+            w_in[start_time - rise - flat + 1] - w_in[start_time - 2 * rise - flat + 1]
+        )
+
     a_out[0] = (i_1 - i_2) / rise
