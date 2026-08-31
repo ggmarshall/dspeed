@@ -70,10 +70,12 @@ def linear_slope_fit(
 
     for i in range(0, len(w_in), 1):
         # the mean and standard deviation
-        temp = w_in[i] - mean
-        mean += temp / (i + 1)
-        stdev += temp * (
-            w_in[i] - mean
+        # index the length-1 outputs explicitly: full-array expressions on
+        # them allocate a temporary array per sample
+        temp = w_in[i] - mean[0]
+        mean[0] += temp / (i + 1)
+        stdev[0] += temp * (
+            w_in[i] - mean[0]
         )  # Welford's method is difference between updated mean and old mean
         # (x_i -mean_i) * (x_i - mean_i-1)
 
@@ -83,8 +85,8 @@ def linear_slope_fit(
         sum_xy += w_in[i] * i
         sum_y += w_in[i]
 
-    stdev /= isum - 1
-    np.sqrt(stdev, stdev)
+    stdev[0] /= isum - 1
+    stdev[0] = np.sqrt(stdev[0])
 
     slope[0] = (isum * sum_xy - sum_x * sum_y) / (isum * sum_x2 - sum_x * sum_x)
     intercept[0] = (sum_y - sum_x * slope[0]) / isum
@@ -150,9 +152,11 @@ def linear_slope_diff(
 
     for i in range(0, len(w_in), 1):
         # the mean and standard deviation
-        temp = w_in[i] - (slope * i + intercept)
-        mean += temp / (i + 1)
-        rms += temp * temp
+        # index the length-1 outputs explicitly: full-array expressions on
+        # them allocate a temporary array per sample
+        temp = w_in[i] - (slope[0] * i + intercept[0])
+        mean[0] += temp / (i + 1)
+        rms[0] += temp * temp
 
-    rms /= isum - 1
-    np.sqrt(rms, rms)
+    rms[0] /= isum - 1
+    rms[0] = np.sqrt(rms[0])
