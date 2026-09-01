@@ -259,7 +259,7 @@ class ProcChainVarBase(metaclass=ABCMeta):
     pass
 
 
-@numba.njit(cache=True)
+@numba.njit(cache=numba_defaults.cache, boundscheck=numba_defaults.boundscheck)
 def contains_nan(w: np.ndarray) -> bool:
     """Return whether any element of `w` is NaN.
 
