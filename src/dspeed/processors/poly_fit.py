@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
-from ..utils import GUFuncWrapper
+from ..utils import GUFuncWrapper, contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -21,7 +21,7 @@ def _poly_fitter(w_in: np.ndarray, inv: np.ndarray, poly_pars: np.ndarray) -> No
     """Helper function that fits w_in to order `len(poly_pars)-1` polynomial,
     while providing necessary inverse matrix.
     """
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     arr = np.zeros(len(poly_pars), dtype="float")
@@ -89,7 +89,7 @@ def poly_diff(
     mean[0] = np.nan
     rms[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(poly_pars).any():
+    if contains_nan(w_in) or contains_nan(poly_pars):
         return
 
     mean[0] = rms[0] = 0
@@ -124,7 +124,7 @@ def poly_exp_rms(
     mean[0] = np.nan
     rms[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(poly_pars).any():
+    if contains_nan(w_in) or contains_nan(poly_pars):
         return
 
     mean[0] = rms[0] = 0

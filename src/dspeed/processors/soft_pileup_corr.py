@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -51,7 +52,7 @@ def soft_pileup_corr(
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(n_in) or np.isnan(tau_in):
+    if contains_nan(w_in) or np.isnan(n_in) or np.isnan(tau_in):
         return
 
     if not np.floor(n_in) == n_in:
@@ -126,7 +127,7 @@ def soft_pileup_corr_bl(
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(n_in) or np.isnan(tau_in) or np.isnan(b_in):
+    if contains_nan(w_in) or np.isnan(n_in) or np.isnan(tau_in) or np.isnan(b_in):
         return
 
     if not np.floor(n_in) == n_in:

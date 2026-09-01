@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -51,7 +52,7 @@ def saturation(
     n_lo_out[0] = np.nan
     n_hi_out[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(bit_depth_in):
+    if contains_nan(w_in) or np.isnan(bit_depth_in):
         return
 
     if not np.floor(bit_depth_in) == bit_depth_in:

@@ -7,6 +7,7 @@ from math import exp, log
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -46,7 +47,7 @@ def inject_sig_pulse(
     wf_out[:] = np.nan
 
     if (
-        np.isnan(wf_in).any()
+        contains_nan(wf_in)
         or np.isnan(rt)
         or np.isnan(t0)
         or np.isnan(a)
@@ -95,7 +96,7 @@ def inject_exp_pulse(
     wf_out[:] = np.nan
 
     if (
-        np.isnan(wf_in).any()
+        contains_nan(wf_in)
         or np.isnan(rt)
         or np.isnan(t0)
         or np.isnan(a)

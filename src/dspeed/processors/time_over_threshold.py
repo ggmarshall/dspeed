@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -39,7 +40,7 @@ def time_over_threshold(w_in: np.ndarray, a_threshold: float, n_samples: float) 
             - t_sat
           unit: ns
     """
-    if np.isnan(w_in).any() or np.isnan(a_threshold):
+    if contains_nan(w_in) or np.isnan(a_threshold):
         n_samples[0] = np.nan
         return
     n_samples[0] = 0.0

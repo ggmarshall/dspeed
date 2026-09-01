@@ -8,6 +8,8 @@ from numba import guvectorize
 from dspeed.errors import DSPFatal
 from dspeed.utils import numba_defaults_kwargs as nb_kwargs
 
+from ..utils import contains_nan
+
 
 @guvectorize(
     [
@@ -48,7 +50,7 @@ def inl_correction(w_in: np.ndarray, inl: np.ndarray, w_out: np.ndarray) -> None
 
     w_out[:] = np.nan
 
-    if np.isnan(inl).any():
+    if contains_nan(inl):
         return
 
     for i in range(len(w_in)):

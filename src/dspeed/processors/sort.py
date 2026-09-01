@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -35,7 +36,7 @@ def sort(w_in: np.ndarray, w_out: np.ndarray) -> None:
     """
     w_out[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     w_out[:] = w_in

@@ -6,6 +6,7 @@ import numpy as np
 from numba import guvectorize
 
 from ..errors import DSPFatal
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -67,7 +68,7 @@ def fixed_time_pickoff(w_in: np.ndarray, t_in: float, mode_in: np.int8, a_out: f
     """
     a_out[0] = np.nan
 
-    if np.isnan(w_in).any() or np.isnan(t_in):
+    if contains_nan(w_in) or np.isnan(t_in):
         return
 
     if t_in < 0 or t_in > len(w_in) - 1:

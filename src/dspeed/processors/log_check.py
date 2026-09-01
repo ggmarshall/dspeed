@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 from numba import guvectorize
 
+from ..utils import contains_nan
 from ..utils import numba_defaults_kwargs as nb_kwargs
 
 
@@ -39,7 +40,7 @@ def log_check(w_in: np.ndarray, w_log: np.ndarray) -> None:
     """
     w_log[:] = np.nan
 
-    if np.isnan(w_in).any():
+    if contains_nan(w_in):
         return
 
     if np.any(w_in <= 0):
