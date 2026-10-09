@@ -953,5 +953,6 @@ def test_vov_output_unit_conversion_first_block():
     }
     tb_out = build_dsp(tb_in, dsp_config=dsp_config, block_width=4)
     assert tb_out.tp_max.attrs["units"] == "ns"
-    assert np.array_equal(tb_out.tp_max.cumulative_length.nda, np.arange(1, n_wfs + 1))
+    lengths = tb_out.tp_max.cumulative_length.nda
+    assert np.array_equal(lengths, np.arange(1, n_wfs + 1))
     assert np.array_equal(tb_out.tp_max.flattened_data.nda, peaks * 16.0)

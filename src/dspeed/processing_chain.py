@@ -2246,12 +2246,11 @@ class LGDOVectorOfVectorsIOManager(IOManager):
                 )
                 msg = f"No maximum length provided for VectorOfVectors output {self.var}. Use {self.var.shape} using twice the maximum length of the first batch of values. It is recommended to set the shape of this value in the first processor that uses it!"
                 log.warning(msg)
-            proc_managers = self.var.proc_chain._proc_managers
-            n_procs = len(proc_managers)
+            n_procs = len(self.var.proc_chain._proc_managers)
             self.raw_var = self.var.get_buffer(self.unit)
             # get_buffer may append a unit conversion after this block's
             # processors already ran; run it now so this block is converted too
-            for proc_man in proc_managers[n_procs:]:
+            for proc_man in self.var.proc_chain._proc_managers[n_procs:]:
                 proc_man.execute()
 
         self.io_vov.resize(end)
